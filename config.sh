@@ -18,30 +18,32 @@ MysqlPassWord="root";#mysql username and password
 declare -A LIBS;
 declare -A VERS;
 declare -A DUS;
+declare -A IN_DIR_SETS;
 # soft url and down
-DUS['nginx']="http://nginx.org/download/nginx-1.7.7.tar.gz"
-VERS['nginx']="1.7.7"
+DUS['nginx']="http://nginx.org/download/nginx-1.7.8.tar.gz"
+VERS['nginx']="1.7.8"
 
 DUS['mysql']="http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.21.tar.gz"
 VERS['mysql']="5.6.21"
 
-DUS['MariaDB']="http://mirrors.hustunique.com/mariadb/mariadb-10.0.14/source/mariadb-10.0.14.tar.gz"
-VERS['MariaDB']="10.0.14"
+DUS['MariaDB']="http://mirrors.hustunique.com/mariadb/mariadb-10.0.15/source/mariadb-10.0.15.tar.gz"
+VERS['MariaDB']="10.0.15"
 
-DUS['php5.6.x']="http://cn2.php.net/distributions/php-5.6.2.tar.gz"
-VERS['php5.6.x']="5.6.2"
+DUS['php5.6.x']="http://cn2.php.net/distributions/php-5.6.4.tar.gz"
+VERS['php5.6.x']="5.6.4"
 
-DUS['php5.5.x']="http://cn2.php.net/distributions/php-5.5.18.tar.gz"
-VERS['php5.5.x']="5.5.18"
+DUS['php5.5.x']="http://cn2.php.net/distributions/php-5.5.20.tar.gz"
+VERS['php5.5.x']="5.5.20"
 
-DUS['php5.4.x']="http://cn2.php.net/distributions/php-5.4.34.tar.gz"
-VERS['php5.4.x']="5.4.34"
+DUS['php5.4.x']="http://cn2.php.net/distributions/php-5.4.36.tar.gz"
+VERS['php5.4.x']="5.4.36"
 
 DUS['php5.3.x']="http://cn2.php.net/distributions/php-5.3.29.tar.gz"
 VERS['php5.3.x']="5.3.29"
+IN_DIR_SETS['php5.3.x']=${IN_DIR}/php
 
-DUS['phpMyAdmin']="http://jaist.dl.sourceforge.net/project/phpmyadmin/phpMyAdmin/4.2.10.1/phpMyAdmin-4.2.10.1-all-languages.tar.gz"
-VERS['phpMyAdmin']="4.2.10.1"
+DUS['phpMyAdmin']="http://jaist.dl.sourceforge.net/project/phpmyadmin/phpMyAdmin/4.3.3/phpMyAdmin-4.3.3-all-languages.tar.gz"
+VERS['phpMyAdmin']="4.3.3"
 
 DUS['libpcre']="http://www.lanmps.com/down/pcre-8.33.tar.gz"
 VERS['libpcre']="8.33"

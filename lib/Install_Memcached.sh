@@ -5,7 +5,7 @@ function Install_Memcached()
 	echo "=========================== install memcached ======================"
 	local IN_LOG=$LOGPATH/install_Install_Memcache.sh.lock
 	echo
-    [ -f $IN_LOG ] && return
+    [ -f "$IN_LOG" ] && return
 	
 
 	local Memcached_DIR=$IN_DIR/memcached

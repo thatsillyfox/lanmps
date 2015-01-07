@@ -14,7 +14,7 @@ function Init()
 	
 	local IN_LOG=$LOGPATH/install_Init.sh.lock
     echo
-    [ -f $IN_LOG ] && return
+    [ -f "$IN_LOG" ] && return
 	
 	Init_ReplacementSource
 	
@@ -136,10 +136,10 @@ function Init_SetDirectoryAndUser
 	echo
 	
 	cd $IN_PWD
-	[ ! -d $IN_DOWN ] && mkdir $IN_DOWN
+	[ ! -d "$IN_DOWN" ] && mkdir $IN_DOWN
 	
 	#make sure install dir
-	if [ ! -d $IN_DIR ]; then
+	if [ ! -d "$IN_DIR" ]; then
 		echo "=============Start creating users and user groups=========="
 		echo "groupadd www"
 		echo "useradd -s /sbin/nologin -g www www"

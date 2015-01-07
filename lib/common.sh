@@ -54,6 +54,12 @@ echo "A tool to auto-compile & install Apache+Nginx+MySQL+PHP on Linux "
 echo "For more information please visit http://www.lanmps.com"
 echo "========================================================================="
 echo "Environmental Monitoring"
+echo "IN_PWD: ${IN_PWD}"
+echo "IN_DOWN: ${IN_DOWN}"
+echo "LOGPATH: ${LOGPATH}"
+echo "IN_DIR: ${IN_DIR}"
+echo "IN_WEB_DIR: ${IN_WEB_DIR}"
+echo "IN_WEB_LOG_DIR: ${IN_WEB_LOG_DIR}"
 echo "Linux	: ${OS_RL} ${t_median}"
 echo "Memory	: ${MemTotal}"
 echo "IP	: $IP"
@@ -193,7 +199,10 @@ echo "Press any key to start..."
 char=`get_char`;
 
 chmod 777 $IN_PWD/lib/*
-if [ ! -d $LOGPATH ]; then
+chmod 777 $IN_PWD/down/*
+if [ ! -d "$LOGPATH" ]; then
 	mkdir $LOGPATH
 	chmod +w $LOGPATH
+else
+    chmod +w $LOGPATH
 fi

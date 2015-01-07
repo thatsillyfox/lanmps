@@ -2,7 +2,7 @@
 function Install_PHP {
 	local IN_LOG=$LOGPATH/install_Install_PHP_${PHP_VER}.sh.lock
 	echo
-    [ -f $IN_LOG ] && return
+    [ -f "$IN_LOG" ] && return
     echo "============================Install PHP ${PHP_VER}================================"
 	echo "Input $PHP_VER_ID"
 	echo "Install_PHP_VER $PHP_VER $PHP_KEY"

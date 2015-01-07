@@ -1,9 +1,9 @@
 cd $IN_DOWN
-tar zxvf php-${VERS['php5.3']}.tar.gz
-cd php-${VERS['php5.3']}/
+tar zxvf php-${VERS['php5.3.x']}.tar.gz
+cd php-${VERS['php5.3.x']}/
 ./configure \
---prefix=${IN_DIR}/php \
---with-config-file-path=${IN_DIR}/php \
+--prefix=${IN_DIR_SETS['php5.3.x']} \
+--with-config-file-path=${IN_DIR_SETS['php5.3.x']} \
 --enable-fpm \
 --with-fpm-user=www \
 --with-fpm-group=www \
@@ -46,13 +46,22 @@ cd php-${VERS['php5.3']}/
 make ZEND_EXTRA_LIBS='-liconv'
 make install
 
-[ -e /usr/bin/php ] && rm -f /usr/bin/php
-ln -s ${IN_DIR}/php/bin/php /usr/bin/php
-ln -s ${IN_DIR}/php/bin/phpize /usr/bin/phpize
-ln -s ${IN_DIR}/php/sbin/php-fpm /usr/bin/php-fpm
+if [ "${IN_DIR_SETS['php5.3.x']}" = "${IN_DIR}/php" ]; then
+	[ -e /usr/bin/php ] && rm -f /usr/bin/php
+	ln -s ${IN_DIR_SETS['php5.3.x']}/bin/php /usr/bin/php
+	ln -s ${IN_DIR_SETS['php5.3.x']}/bin/phpize /usr/bin/phpize
+	ln -s ${IN_DIR_SETS['php5.3.x']}/sbin/php-fpm /usr/bin/php-fpm
+else
+	[ -e /usr/bin/php53 ] && rm -f /usr/bin/php53
+	ln -s ${IN_DIR_SETS['php5.3.x']}/bin/php /usr/bin/php53
+	ln -s ${IN_DIR_SETS['php5.3.x']}/bin/phpize /usr/bin/phpize53
+	ln -s ${IN_DIR_SETS['php5.3.x']}/sbin/php-fpm /usr/bin/php-fpm53
+fi
+
+
 
 echo "Copy new php configure file."
-php_ini="${IN_DIR}/php/php.ini"
+php_ini="${IN_DIR_SETS['php5.3.x']}/php.ini"
 
 cp php.ini-production $php_ini
 
@@ -65,18 +74,21 @@ sed -i 's/;date.timezone =/date.timezone = PRC/g' $php_ini
 sed -i 's/short_open_tag = Off/short_open_tag = On/g' $php_ini
 sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' $php_ini
 sed -i 's/;cgi.fix_pathinfo=0/cgi.fix_pathinfo=0/g' $php_ini
-sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' $php_ini
 sed -i 's/max_execution_time = 30/max_execution_time = 300/g' $php_ini
 sed -i 's/register_long_arrays = On/;register_long_arrays = On/g' $php_ini
 sed -i 's/magic_quotes_gpc = On/;magic_quotes_gpc = On/g' $php_ini
 sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' $php_ini
 sed -i 's:mysql.default_socket =:mysql.default_socket ='$IN_DIR'/mysql/data/mysql.sock:g' $php_ini
 
-ln -s $php_ini $IN_DIR/etc/php.ini
+#ln -s $php_ini $IN_DIR/etc/php.ini
 
 echo "MV php-fpm.conf file"
-conf=$IN_DIR/php/etc/php-fpm.conf;
-mv $IN_DIR/php/etc/php-fpm.conf.default $conf
+if [ "${IN_DIR_SETS['php5.3.x']}" = "${IN_DIR}/php" ]; then
+	conf=${IN_DIR_SETS['php5.3.x']}/etc/php-fpm.conf;
+else
+	conf=${IN_DIR_SETS['php5.3.x']}/etc/php-fpm.conf;
+fi
+mv ${IN_DIR_SETS['php5.3.x']}/etc/php-fpm.conf.default $conf
 
 sed -i 's:;pid = run/php-fpm.pid:pid = run/php-fpm.pid:g' $conf
 sed -i 's:;error_log = log/php-fpm.log:error_log = '"$IN_WEB_LOG_DIR"'/php-fpm.log:g' $conf
@@ -85,15 +97,36 @@ sed -i 's:pm.max_children = 5:pm.max_children = 10:g' $conf
 sed -i 's:pm.max_spare_servers = 3:pm.max_spare_servers = 6:g' $conf
 sed -i 's:;request_terminate_timeout = 0:request_terminate_timeout = 100:g' $conf
 
-ln -s $IN_DIR/php/etc/php-fpm.conf $IN_DIR/etc/php-fpm.conf
 
+echo "ln -s ${IN_DIR_SETS['php5.3.x']}/etc/php-fpm.conf $IN_DIR/etc/php-fpm.conf "
 echo "Copy php-fpm init.d file......"
-cp "${IN_DOWN}/php-${PHP_VER}/sapi/fpm/init.d.php-fpm" $IN_DIR/init.d/php-fpm
-chmod +x $IN_DIR/init.d/php-fpm
-if [ $ETC_INIT_D_LN = 1 ]; then
-	ln -s $IN_DIR/init.d/php-fpm /etc/init.d/php-fpm
+echo "chmod +x ${IN_DIR}/init.d/php-fpm-53"
+
+if [ "${IN_DIR_SETS['php5.3.x']}" = "${IN_DIR}/php" ]; then
+	ln -s ${IN_DIR_SETS['php5.3.x']}/etc/php-fpm.conf $IN_DIR/etc/php-fpm.conf
+	cp "${IN_DOWN}/php-${VERS['php5.3.x']}/sapi/fpm/init.d.php-fpm" $IN_DIR/init.d/php-fpm
+	chmod +x $IN_DIR/init.d/php-fpm
+	
+	if [ $ETC_INIT_D_LN = 1 ]; then
+		ln -s $IN_DIR/init.d/php-fpm /etc/init.d/php-fpm
+	fi
+	if [ ! $IN_DIR = "/www/lanmps" ]; then
+		sed -i "s:/www/lanmps:$IN_DIR:g" $IN_DIR/init.d/php-fpm
+	fi
+	
+else
+	sed -i 's/listen = 127.0.0.1:9000/listen = 127.0.0.1:9530/g' $conf
+	
+	ln -s ${IN_DIR_SETS['php5.3.x']}/etc/php-fpm.conf $IN_DIR/etc/php-fpm-53.conf
+	cp "${IN_DOWN}/php-${VERS['php5.3.x']}/sapi/fpm/init.d.php-fpm" $IN_DIR/init.d/php-fpm-53
+	chmod +x $IN_DIR/init.d/php-fpm-53
+	
+	if [ $ETC_INIT_D_LN = 1 ]; then
+		ln -s $IN_DIR/init.d/php-fpm /etc/init.d/php-fpm-53
+	fi
+	if [ ! $IN_DIR = "/www/lanmps" ]; then
+		sed -i "s:/www/lanmps:$IN_DIR:g" $IN_DIR/init.d/php-fpm-53
+	fi
 fi
-if [ ! $IN_DIR = "/www/lanmps" ]; then
-	sed -i "s:/www/lanmps:$IN_DIR:g" $IN_DIR/init.d/php-fpm
-fi
+
 unset php_ini conf

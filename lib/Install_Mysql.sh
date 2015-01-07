@@ -2,7 +2,7 @@
 function Install_Mysql {
 	local IN_LOG=$LOGPATH/install_Install_Mysql.sh.lock
 	echo
-    [ -f $IN_LOG ] && return
+    [ -f "$IN_LOG" ] && return
 	
     echo "============================Install MySQL ${VERS['mysql']}=================================="
 	

@@ -23,33 +23,37 @@ function_start()
 {
     echo "Starting LNMP..."
 	
-    /etc/init.d/nginx start
+    $IN_DIR/init.d/nginx start
 
-    /etc/init.d/php-fpm start
+    $IN_DIR/init.d/php-fpm start
 
-    /etc/init.d/mysql start
+    $IN_DIR/init.d/mysql start
+	
+	$IN_DIR/init.d/memcached start
 }
 
 function_stop()
 {
     echo "Stoping LNMP..."
 	
-    /etc/init.d/nginx stop
+    $IN_DIR/init.d/nginx stop
 
-    /etc/init.d/php-fpm stop
+    $IN_DIR/init.d/php-fpm stop
 
-    /etc/init.d/mysql stop
+    $IN_DIR/init.d/mysql stop
+	
+	$IN_DIR/init.d/memcached stop
 }
 
 function_reload()
 {
     echo "Reload LNMP..."
 	
-    /etc/init.d/nginx reload
+    $IN_DIR/init.d/nginx reload
 
-    /etc/init.d/php-fpm reload
+    $IN_DIR/init.d/php-fpm reload
 
-    /etc/init.d/mysql reload
+    $IN_DIR/init.d/mysql reload
 }
 
 function_kill()
@@ -58,15 +62,16 @@ function_kill()
     killall php-cgi
     killall php-fpm
     killall mysqld
+	killall memcached
 }
 
 function_status()
 {
-    /etc/init.d/nginx status
+    $IN_DIR/init.d/nginx status
 
-    /etc/init.d/php-fpm status
+    $IN_DIR/init.d/php-fpm status
 
-	/etc/init.d/mysql status
+	$IN_DIR/init.d/mysql status
 }
 
 case "$1" in

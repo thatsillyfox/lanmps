@@ -70,7 +70,7 @@ function CheckInstall()
 	  echo "Error: $IN_DIR/nginx not found!!!Nginx install failed."
 	fi
 
-	if [ -s $IN_DIR/php/sbin/php-fpm ] && [ -s $IN_DIR/php/php.ini ] && [ -s $IN_DIR/php/bin/php ]; then
+	if [ -s "$IN_DIR/php/sbin/php-fpm" ] && [ -s "$IN_DIR/php/php.ini" ] && [ -s $IN_DIR/php/bin/php ]; then
 		echo "PHP: OK"
 		echo "PHP-FPM: OK"
 		isphp="ok"
@@ -78,7 +78,7 @@ function CheckInstall()
 		echo "Error: $IN_DIR/php not found!!!PHP install failed."
 	fi
 
-	if [ -s $IN_DIR/$MYSQL_INITD ] && [ -s $IN_DIR/mysql/bin/mysql ]; then
+	if [ -s "$IN_DIR/$MYSQL_INITD" ] && [ -s "$IN_DIR/mysql/bin/mysql" ]; then
 		  echo "MySQL: OK"
 		  ismysql="ok"
 		else

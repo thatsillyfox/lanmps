@@ -2,7 +2,7 @@ function Install_DependsAndOpt()
 {
 	local IN_LOG=$LOGPATH/install_Install_DependsAndOpt.sh.lock
     echo
-    [ -f $IN_LOG ] && return
+    [ -f "$IN_LOG" ] && return
 	
 	/sbin/ldconfig
 	
