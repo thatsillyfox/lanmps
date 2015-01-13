@@ -62,6 +62,9 @@ ServerName localhost
 	if [ ! $IN_WEB_LOG_DIR = "/www/wwwLogs" ]; then
 		sed -i "s:/www/wwwLogs:$IN_WEB_LOG_DIR:g" $conf_default
 	fi
+	if [ ! $IN_DIR = "/www/lanmps" ]; then
+		sed -i "s:/www/lanmps:$IN_DIR:g" $conf_default
+	fi
 	
 	if [ $OS_RL == "ubuntu" ]; then
         file_cp init.httpd-ubuntu $IN_DIR/init.d/httpd

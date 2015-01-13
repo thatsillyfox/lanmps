@@ -63,7 +63,7 @@ if [[ $access_log == "y" || $access_log == "Y" ]];then
 	apache_log="    ErrorLog \"${IN_WEB_LOG_DIR}/logs/$domain/_error.error_log\"
     CustomLog \"|/${IN_DIR}/apache/bin/rotatelogs ${IN_WEB_LOG_DIR}/logs/$domain/%Y_%m_%d.access.log 86400\" common"
 	echo
-	echo "access_log dir:"$IN_WEB_LOG_DIR/$domain.log
+	echo "access_log dir:"$IN_WEB_LOG_DIR/logs/$domain/Y_m_d.log
 	echo "------------------------------------------"
 	echo
 else
