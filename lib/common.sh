@@ -37,6 +37,7 @@ IP=${IP// /}
 . lib/Install_DependsAndOpt.sh
 . lib/Install_Mysql.sh
 . lib/Install_Nginx.sh
+. lib/Install_Apache.sh
 . lib/Install_PHP.sh
 . lib/Install_PHP_Tools.sh
 . lib/Install_Memcached.sh
@@ -77,6 +78,7 @@ echo ""
 #4 install all service
 echo "Select Install  ( 1 default ):
     1 Nginx + php + mysql + sphinx + opcache + memcache + phpmyadmin
+    2 Apache + php + mysql + sphinx + opcache + memcache + phpmyadmin
     5 don't install is now"
 sleep 0.1
 
@@ -84,7 +86,7 @@ read -p "Please Input 1,2,3,4,5: " SERVER_ID
 if [ "$SERVER_ID" = "" ]; then
 	SERVER_ID="1"
 fi
-SERVER_ID="1"
+
 echo "Input $SERVER_ID"
 
 if [[ $SERVER_ID == 1 ]]; then
@@ -98,6 +100,7 @@ elif [[ $SERVER_ID == 4 ]]; then
 else
     exit
 fi
+echo $SERVER
 
 #PHP Version
 echo
@@ -115,6 +118,10 @@ fi
 if [ "${PHP_VER_ID}" == "4" ]; then
     PHP_VER=${VERS['php5.3.x']}
 	PHP_KEY="php5.3.x"
+elif [ "${PHP_VER_ID}" == "3" ]; then
+    PHP_VER=${VERS['php5.5.x']}
+	PHP_KEY="php5.4.x"
+	PHP_VER_ID=3
 elif [ "${PHP_VER_ID}" == "2" ]; then
     PHP_VER=${VERS['php5.5.x']}
 	PHP_KEY="php5.5.x"

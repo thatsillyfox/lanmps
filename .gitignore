@@ -3,6 +3,7 @@
 /down/mariadb-*.tar.gz
 /down/mysql-*.tar.gz
 /down/nginx-*.tar.gz
+/down/httpd-*.tar.gz
 /down/php-*.tar.gz
 /down/coreseek-*.tar.gz
 /down/phpMyAdmin-*-all-languages.tar.gz

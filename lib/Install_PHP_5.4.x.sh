@@ -7,7 +7,7 @@ else
 	tmp_configure="--with-apxs2=${IN_DIR}/apache/bin/apxs"
 fi
 
-echo "php-${VERS['php5.5.x']}.tar.gz"
+echo "php-${VERS['php5.4.x']}.tar.gz"
 
 cd $IN_DOWN
 tar zxvf php-${PHP_VER}.tar.gz

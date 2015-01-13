@@ -8,6 +8,8 @@ function Init_CheckAndDownloadFiles()
 	
 	ProgramDownloadFiles "nginx" "nginx-${VERS['nginx']}.tar.gz"
 	
+	ProgramDownloadFiles "apache" "httpd-${VERS['apache']}.tar.gz"
+	
 	if [ "$MYSQL_ID" == "mysql" ]; then
 		ProgramDownloadFiles "mysql" "mysql-${VERS['mysql']}.tar.gz"
 	else

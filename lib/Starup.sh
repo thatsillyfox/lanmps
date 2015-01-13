@@ -15,13 +15,28 @@ EOF
 	echo "============================add nginx and php-fpm on startup============================"
 	echo "Set start"
 	if [ $OS_RL = "centos" ]; then
-		chkconfig --level 345 php-fpm on
-		chkconfig --level 345 nginx on
+		if [ $SERVER == "nginx" ]; then
+			chkconfig --add php-fpm
+			chkconfig --level 345 php-fpm on
+			
+			chkconfig --add nginx
+			chkconfig --level 345 nginx on
+		else
+		    chkconfig --add httpd
+			chkconfig --level 345 httpd on
+		fi
+		chkconfig --add mysql
 		chkconfig --level 345 mysql on
+		
+		chkconfig --add memcached
 		chkconfig --level 345 memcached on
 	else
-		update-rc.d -f php-fpm defaults
-		update-rc.d -f nginx defaults
+	    if [ $SERVER == "apache" ]; then
+			update-rc.d -f httpd defaults
+		else
+			update-rc.d -f php-fpm defaults
+			update-rc.d -f nginx defaults
+		fi
 		update-rc.d -f mysql defaults
 		update-rc.d -f memcached defaults
 	fi
@@ -39,8 +54,13 @@ EOF
 	echo "Starting LNMP..."
 	$IN_DIR/init.d/$MYSQL_INITD start
 	
-	$IN_DIR/init.d/php-fpm start
-	$IN_DIR/init.d/nginx start
+	if [ $SERVER == "nginx" ]; then
+		$IN_DIR/init.d/php-fpm start
+		$IN_DIR/init.d/nginx start
+	else
+		$IN_DIR/init.d/httpd start
+	fi
+	
 	$IN_DIR/init.d/memcached start
 	
 	#add 80 port to iptables
@@ -63,21 +83,37 @@ function CheckInstall()
 	ismysql=""
 	isphp=""
 	echo "Checking..."
-	if [ -s $IN_DIR/nginx ] && [ -s $IN_DIR/nginx/sbin/nginx ]; then
-	  echo "Nginx: OK"
-	  isnginx="ok"
+	if [ $SERVER == "nginx" ]; then
+		if [ -s $IN_DIR/nginx ] && [ -s $IN_DIR/nginx/sbin/nginx ]; then
+			echo "${SERVER}: OK"
+			isnginx="ok"
+		else
+			echo "Error: $IN_DIR/${SERVER} not found!!!${SERVER} install failed."
+		fi
+		
+		if [ -s "$IN_DIR/php/sbin/php-fpm" ] && [ -s "$IN_DIR/php/php.ini" ] && [ -s $IN_DIR/php/bin/php ]; then
+			echo "PHP: OK"
+			echo "PHP-FPM: OK"
+			isphp="ok"
+		else
+			echo "Error: $IN_DIR/php not found!!!PHP install failed."
+		fi
 	else
-	  echo "Error: $IN_DIR/nginx not found!!!Nginx install failed."
+		if [ -s $IN_DIR/apache ] && [ -s $IN_DIR/apache/bin/httpd ]; then
+			echo "${SERVER}: OK"
+			isnginx="ok"
+		else
+			echo "Error: $IN_DIR/${SERVER} not found!!!${SERVER} install failed."
+		fi
+		
+		if [ -s "$IN_DIR/php/php.ini" ] && [ -s $IN_DIR/php/bin/php ]; then
+			echo "PHP: OK"
+			isphp="ok"
+		else
+			echo "Error: $IN_DIR/php not found!!!PHP install failed."
+		fi
 	fi
-
-	if [ -s "$IN_DIR/php/sbin/php-fpm" ] && [ -s "$IN_DIR/php/php.ini" ] && [ -s $IN_DIR/php/bin/php ]; then
-		echo "PHP: OK"
-		echo "PHP-FPM: OK"
-		isphp="ok"
-	else
-		echo "Error: $IN_DIR/php not found!!!PHP install failed."
-	fi
-
+	
 	if [ -s "$IN_DIR/$MYSQL_INITD" ] && [ -s "$IN_DIR/mysql/bin/mysql" ]; then
 		  echo "MySQL: OK"
 		  ismysql="ok"
@@ -102,7 +138,11 @@ function CheckInstall()
 		echo "The path of some dirs:"
 		echo "mysql dir:   $IN_DIR/$MYSQL_INITD"
 		echo "php dir:     $IN_DIR/php"
-		echo "nginx dir:   $IN_DIR/nginx"
+		if [ $SERVER == "nginx" ]; then
+			echo "nginx dir:   $IN_DIR/nginx"
+		else
+			echo "apache dir:   $IN_DIR/apache"
+		fi
 		echo "web dir :    $IN_WEB_DIR/default"
 		echo ""
 		echo "========================================================================="

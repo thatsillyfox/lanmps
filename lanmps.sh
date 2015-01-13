@@ -15,7 +15,11 @@ Init_CheckAndDownloadFiles;
 
 Install_DependsAndOpt;
 
-Install_Nginx;
+if [ $SERVER == "apache" ]; then
+	Install_Apache;
+else
+	Install_Nginx;
+fi
 
 Install_PHP;
 

@@ -60,8 +60,8 @@ read access_log
 if [[ $access_log == "y" || $access_log == "Y" ]];then
 	nginx_log="#log_format  $domain  '\$remote_addr - \$remote_user [\$time_local] \"\$request\" \$status \$body_bytes_sent \"\$http_referer\" \"\$http_user_agent\" \$http_x_forwarded_for';
 	access_log  ${IN_WEB_LOG_DIR}/$domain.log  access;"
-	apache_log="    ErrorLog \"${IN_WEB_LOG_DIR}/$domain.error_log\"
-    CustomLog \"${IN_WEB_LOG_DIR}/$domain.log\" common"
+	apache_log="    ErrorLog \"${IN_WEB_LOG_DIR}/logs/$domain/_error.error_log\"
+    CustomLog \"|/${IN_DIR}/apache/bin/rotatelogs ${IN_WEB_LOG_DIR}/logs/$domain/%Y_%m_%d.access.log 86400\" common"
 	echo
 	echo "access_log dir:"$IN_WEB_LOG_DIR/$domain.log
 	echo "------------------------------------------"
@@ -87,6 +87,7 @@ fi
 #fi
 
 echo "Create virtual host directory."
+mkdir -p $IN_WEB_LOG_DIR/logs/$domain
 mkdir -p $IN_WEB_DIR/$domain
 chown -R www:www $IN_WEB_DIR/$domain
 

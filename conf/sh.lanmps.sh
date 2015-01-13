@@ -7,6 +7,13 @@ if [ $UID != 0 ]; then
     exit 1
 fi
 
+PS_SERVER=`ps ax | grep nginx.conf | grep -v "grep"`
+if [[ $PS_SERVER ]];then
+	SERVER="nginx"
+else
+	SERVER="apache"
+fi
+
 IN_DIR="/www/lanmps"
 echo "========================================================================="
 echo "Manager for LANMPS V0.1 "
@@ -23,10 +30,13 @@ function_start()
 {
     echo "Starting LNMP..."
 	
-    $IN_DIR/init.d/nginx start
-
-    $IN_DIR/init.d/php-fpm start
-
+	if [[ $SERVER == "apache" ]];then
+	    $IN_DIR/init.d/httpd start
+	else
+	    $IN_DIR/init.d/nginx start
+		$IN_DIR/init.d/php-fpm start
+	fi
+    
     $IN_DIR/init.d/mysql start
 	
 	$IN_DIR/init.d/memcached start
@@ -36,9 +46,12 @@ function_stop()
 {
     echo "Stoping LNMP..."
 	
-    $IN_DIR/init.d/nginx stop
-
-    $IN_DIR/init.d/php-fpm stop
+	if [[ $SERVER == "apache" ]];then
+	    $IN_DIR/init.d/httpd stop
+	else
+	    $IN_DIR/init.d/nginx stop
+		$IN_DIR/init.d/php-fpm stop
+	fi
 
     $IN_DIR/init.d/mysql stop
 	
@@ -49,27 +62,38 @@ function_reload()
 {
     echo "Reload LNMP..."
 	
-    $IN_DIR/init.d/nginx reload
-
-    $IN_DIR/init.d/php-fpm reload
+	if [[ $SERVER == "apache" ]];then
+	    $IN_DIR/init.d/httpd reload
+	else
+	    $IN_DIR/init.d/nginx reload
+		$IN_DIR/init.d/php-fpm reload
+	fi
 
     $IN_DIR/init.d/mysql reload
 }
 
 function_kill()
 {
-    killall nginx
-    killall php-cgi
-    killall php-fpm
+    if [[ $SERVER == "apache" ]];then
+	     killall httpd
+	else
+	    killall nginx
+		killall php-cgi
+		killall php-fpm
+	fi
     killall mysqld
 	killall memcached
 }
 
 function_status()
 {
-    $IN_DIR/init.d/nginx status
 
-    $IN_DIR/init.d/php-fpm status
+    if [[ $SERVER == "apache" ]];then
+	    $IN_DIR/init.d/httpd status
+	else
+	    $IN_DIR/init.d/nginx status
+		$IN_DIR/init.d/php-fpm status
+	fi
 
 	$IN_DIR/init.d/mysql status
 }

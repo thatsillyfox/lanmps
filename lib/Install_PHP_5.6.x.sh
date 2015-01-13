@@ -1,4 +1,11 @@
 
+tmp_configure=""
+if [ $SERVER == "nginx" ]; then
+	tmp_configure="--enable-fpm --with-fpm-user=www --with-fpm-group=www"
+else
+	tmp_configure="--with-apxs2=${IN_DIR}/apache/bin/apxs"
+fi
+
 echo "php-${VERS['php5.6.x']}.tar.gz"
 
 cd $IN_DOWN
@@ -6,9 +13,6 @@ tar zxvf php-${PHP_VER}.tar.gz
 cd php-${PHP_VER}/
 ./configure --prefix="${IN_DIR}/php" \
 --with-config-file-path="${IN_DIR}/php" \
---enable-fpm \
---with-fpm-user=www \
---with-fpm-group=www \
 --with-mysql=mysqlnd \
 --with-mysqli=mysqlnd \
 --with-pdo-mysql=mysqlnd \
@@ -41,7 +45,7 @@ cd php-${PHP_VER}/
 --enable-soap \
 --without-pear \
 --with-gettext \
---disable-fileinfo
+--disable-fileinfo $tmp_configure
 
 #make ZEND_EXTRA_LIBS='-liconv'
 make
@@ -76,6 +80,9 @@ sed -i 's/expose_php/;expose_php/g' $php_ini
 
 ln -s $php_ini $IN_DIR/etc/php.ini
 
+#PHP-FPM
+if [ $SERVER == "nginx" ]; then
+
 echo "MV php-fpm.conf file"
 conf=$IN_DIR/php/etc/php-fpm.conf;
 mv $IN_DIR/php/etc/php-fpm.conf.default $conf
@@ -98,4 +105,9 @@ fi
 if [ ! $IN_DIR = "/www/lanmps" ]; then
 	sed -i "s:/www/lanmps:$IN_DIR:g" $IN_DIR/init.d/php-fpm
 fi
+
+
+
+fi
+#PHP-FPM
 unset php_ini conf

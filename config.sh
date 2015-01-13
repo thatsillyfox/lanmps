@@ -20,30 +20,37 @@ declare -A VERS;
 declare -A DUS;
 declare -A IN_DIR_SETS;
 # soft url and down
-DUS['nginx']="http://nginx.org/download/nginx-1.7.8.tar.gz"
-VERS['nginx']="1.7.8"
+#http://nginx.org/download/nginx-1.7.9.tar.gz
+DUS['nginx']="http://download.lanmps.com/nginx/nginx-1.7.9.tar.gz"
+VERS['nginx']="1.7.9"
 
 DUS['mysql']="http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.21.tar.gz"
 VERS['mysql']="5.6.21"
 
+#http://mirrors.hustunique.com/mariadb/mariadb-10.0.15/source/mariadb-10.0.15.tar.gz
 DUS['MariaDB']="http://mirrors.hustunique.com/mariadb/mariadb-10.0.15/source/mariadb-10.0.15.tar.gz"
 VERS['MariaDB']="10.0.15"
 
-DUS['php5.6.x']="http://cn2.php.net/distributions/php-5.6.4.tar.gz"
+#http://cn2.php.net/distributions/php-5.6.4.tar.gz
+DUS['php5.6.x']="http://download.lanmps.com/php/php-5.6.4.tar.gz"
 VERS['php5.6.x']="5.6.4"
 
-DUS['php5.5.x']="http://cn2.php.net/distributions/php-5.5.20.tar.gz"
+#http://cn2.php.net/distributions/php-5.5.20.tar.gz
+DUS['php5.5.x']="http://download.lanmps.com/php/php-5.5.20.tar.gz"
 VERS['php5.5.x']="5.5.20"
 
-DUS['php5.4.x']="http://cn2.php.net/distributions/php-5.4.36.tar.gz"
+#http://cn2.php.net/distributions/php-5.4.36.tar.gz
+DUS['php5.4.x']="http://download.lanmps.com/php/php-5.4.36.tar.gz"
 VERS['php5.4.x']="5.4.36"
 
-DUS['php5.3.x']="http://cn2.php.net/distributions/php-5.3.29.tar.gz"
+#http://cn2.php.net/distributions/php-5.3.29.tar.gz
+DUS['php5.3.x']="http://download.lanmps.com/php/php-5.3.29.tar.gz"
 VERS['php5.3.x']="5.3.29"
 IN_DIR_SETS['php5.3.x']=${IN_DIR}/php
 
-DUS['phpMyAdmin']="http://jaist.dl.sourceforge.net/project/phpmyadmin/phpMyAdmin/4.3.3/phpMyAdmin-4.3.3-all-languages.tar.gz"
-VERS['phpMyAdmin']="4.3.3"
+#http://jaist.dl.sourceforge.net/project/phpmyadmin/phpMyAdmin/4.3.6/phpMyAdmin-4.3.6-all-languages.tar.gz
+DUS['phpMyAdmin']="http://download.lanmps.com/phpMyAdmin/phpMyAdmin-4.3.6-all-languages.tar.gz"
+VERS['phpMyAdmin']="4.3.6"
 
 DUS['libpcre']="http://www.lanmps.com/down/pcre-8.33.tar.gz"
 VERS['libpcre']="8.33"
@@ -88,3 +95,15 @@ VERS['sphinx-for-chinese']="2.2.1"
 
 DUS['sphinx-coreseek']="http://www.coreseek.cn/uploads/csft/4.0/coreseek-4.1-beta.tar.gz"
 VERS['sphinx-coreseek']="4.1"
+
+#http://mirrors.hust.edu.cn/apache/httpd/httpd-2.4.10.tar.gz
+DUS['apache']="http://download.lanmps.com/Apache/httpd-2.4.10.tar.gz"
+VERS['apache']="2.4.10"
+
+#http://mirrors.axint.net/apache/apr/apr-1.5.1.tar.gz
+DUS['apr']="http://download.lanmps.com/Apache/apr-1.5.1.tar.gz"
+VERS['apr']="1.5.1"
+
+#http://mirrors.axint.net/apache/apr/apr-util-1.5.4.tar.gz
+DUS['apr-util']="http://download.lanmps.com/Apache/apr-util-1.5.4.tar.gz"
+VERS['apr-util']="1.5.4"

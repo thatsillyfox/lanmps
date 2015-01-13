@@ -1,12 +1,16 @@
 cd $IN_DOWN
+tmp_configure=""
+if [ $SERVER == "apache" ]; then
+    tmp_configure="--with-apxs2=${IN_DIR}/apache/bin/apxs"
+else
+	tmp_configure="--enable-fpm --with-fpm-user=www --with-fpm-group=www"
+fi
+
 tar zxvf php-${VERS['php5.3.x']}.tar.gz
 cd php-${VERS['php5.3.x']}/
 ./configure \
 --prefix=${IN_DIR_SETS['php5.3.x']} \
 --with-config-file-path=${IN_DIR_SETS['php5.3.x']} \
---enable-fpm \
---with-fpm-user=www \
---with-fpm-group=www \
 --with-mysql=mysqlnd \
 --with-mysqli=mysqlnd \
 --with-pdo-mysql=mysqlnd \
@@ -41,9 +45,14 @@ cd php-${VERS['php5.3.x']}/
 --enable-soap \
 --without-pear \
 --with-gettext \
---disable-fileinfo
+--disable-fileinfo $tmp_configure
 
-make ZEND_EXTRA_LIBS='-liconv'
+if [ $OS_RL = "centos" ]; then
+    make
+else
+	make ZEND_EXTRA_LIBS='-liconv'
+fi
+
 make install
 
 if [ "${IN_DIR_SETS['php5.3.x']}" = "${IN_DIR}/php" ]; then
@@ -80,7 +89,11 @@ sed -i 's/magic_quotes_gpc = On/;magic_quotes_gpc = On/g' $php_ini
 sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' $php_ini
 sed -i 's:mysql.default_socket =:mysql.default_socket ='$IN_DIR'/mysql/data/mysql.sock:g' $php_ini
 
-#ln -s $php_ini $IN_DIR/etc/php.ini
+#PHP-FPM
+if [ $SERVER == "nginx" ]; then
+
+
+
 
 echo "MV php-fpm.conf file"
 if [ "${IN_DIR_SETS['php5.3.x']}" = "${IN_DIR}/php" ]; then
@@ -129,4 +142,8 @@ else
 	fi
 fi
 
+
+
+fi
+#PHP-FPM
 unset php_ini conf
