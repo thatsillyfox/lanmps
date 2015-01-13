@@ -45,6 +45,8 @@ function Install_Apache {
     #echo "Include conf/httpd-lanmps.conf" >> $conf
     #echo "Include conf/default.conf" >> $conf
     #echo "Include conf/wdcp.conf" >> $conf
+	echo "ServerSignature off" >> $conf
+	echo "ServerTokens prod" >> $conf
     echo "Include conf/vhost/*.conf" >> $conf
     mkdir -p $IN_DIR/apache/conf/{vhost,rewrite}
     sed -i '/#ServerName/a\

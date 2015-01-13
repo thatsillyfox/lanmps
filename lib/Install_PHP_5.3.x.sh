@@ -88,7 +88,7 @@ sed -i 's/register_long_arrays = On/;register_long_arrays = On/g' $php_ini
 sed -i 's/magic_quotes_gpc = On/;magic_quotes_gpc = On/g' $php_ini
 sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,chgrp,chown,shell_exec,proc_open,proc_get_status,ini_alter,ini_restore,dl,openlog,syslog,readlink,symlink,popepassthru,stream_socket_server/g' $php_ini
 sed -i 's:mysql.default_socket =:mysql.default_socket ='$IN_DIR'/mysql/data/mysql.sock:g' $php_ini
-
+sed -i 's/expose_php = Off/expose_php = On/g' $php_ini
 #PHP-FPM
 if [ $SERVER == "nginx" ]; then
 
