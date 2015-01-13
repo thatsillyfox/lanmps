@@ -41,7 +41,7 @@ function Install_Apache {
 	sed -i 's/#LoadModule alias_module/LoadModule alias_module/g' $conf
 	sed -i 's/#LoadModule rewrite_module/LoadModule rewrite_module/g' $conf
 	
-    echo "NameVirtualHost *:80" >> $conf
+    #echo "NameVirtualHost *:80" >> $conf
     #echo "Include conf/httpd-lanmps.conf" >> $conf
     #echo "Include conf/default.conf" >> $conf
     #echo "Include conf/wdcp.conf" >> $conf
@@ -67,6 +67,7 @@ ServerName localhost
 	if [ ! $IN_DIR = "/www/lanmps" ]; then
 		sed -i "s:/www/lanmps:$IN_DIR:g" $conf_default
 	fi
+	mkdir -p $IN_WEB_LOG_DIR/logs/default
 	
 	if [ $OS_RL == "ubuntu" ]; then
         file_cp init.httpd-ubuntu $IN_DIR/init.d/httpd
