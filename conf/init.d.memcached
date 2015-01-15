@@ -1,6 +1,7 @@
 #!/bin/bash
+# Startup script for the Memcache Server
+# chkconfig: - 85 15
 # description:  Startup script for the Memcache
-# Author:Feng
 
 IN_DIR="/www/lanmps"
 . /etc/init.d/functions
