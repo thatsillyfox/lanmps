@@ -28,8 +28,14 @@ function Install_PHP_Tools()
 	elif echo "$php_v" | grep -q "5.2."; then
 		php_ext_date="20060613"
 	fi
-	sed -i 's#extension_dir = "./"#extension_dir = "'$IN_DIR'/php/lib/php/extensions/no-debug-non-zts-'$php_ext_date'/"\nextension = "memcache.so"\n#' $php_ini
-	echo 's#extension_dir = "./"#extension_dir = "'$IN_DIR'/php/lib/php/extensions/no-debug-non-zts-'$php_ext_date'/"\nextension = "memcache.so"\n#'
+	if [ "$php_ext_date" == "20090626" ]; then
+	    php_ext_date="no-debug-zts-${php_ext_date}"
+	else
+	    php_ext_date="no-debug-non-zts-${php_ext_date}"
+	fi
+	
+	sed -i 's#extension_dir = "./"#extension_dir = "'$IN_DIR'/php/lib/php/extensions/'$php_ext_date'/"\nextension = "memcache.so"\n#' $php_ini
+	echo 's#extension_dir = "./"#extension_dir = "'$IN_DIR'/php/lib/php/extensions/'$php_ext_date'/"\nextension = "memcache.so"\n#'
 	
 	echo "Install xdebug php extension..."
 	cd $IN_DOWN
