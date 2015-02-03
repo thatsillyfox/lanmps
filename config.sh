@@ -36,12 +36,12 @@ DUS['php5.6.x']="http://download.lanmps.com/php/php-5.6.4.tar.gz"
 VERS['php5.6.x']="5.6.4"
 
 #http://cn2.php.net/distributions/php-5.5.20.tar.gz
-DUS['php5.5.x']="http://download.lanmps.com/php/php-5.5.20.tar.gz"
-VERS['php5.5.x']="5.5.20"
+DUS['php5.5.x']="http://download.lanmps.com/php/php-5.5.21.tar.gz"
+VERS['php5.5.x']="5.5.21"
 
 #http://cn2.php.net/distributions/php-5.4.36.tar.gz
-DUS['php5.4.x']="http://download.lanmps.com/php/php-5.4.36.tar.gz"
-VERS['php5.4.x']="5.4.36"
+DUS['php5.4.x']="http://download.lanmps.com/php/php-5.4.37.tar.gz"
+VERS['php5.4.x']="5.4.37"
 
 #http://cn2.php.net/distributions/php-5.3.29.tar.gz
 DUS['php5.3.x']="http://download.lanmps.com/php/php-5.3.29.tar.gz"

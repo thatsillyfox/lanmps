@@ -52,6 +52,9 @@ function Install_Apache {
     sed -i '/#ServerName/a\
 ServerName localhost
 ' $conf
+	sed -i '#AddType application/x-compress .Z#a\
+AddType application/x-httpd-php .php
+' $conf
 
 	ln -s $IN_DIR/apache/conf/vhost $IN_DIR/etc/
 	

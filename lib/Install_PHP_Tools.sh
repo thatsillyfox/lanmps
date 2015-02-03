@@ -30,6 +30,8 @@ function Install_PHP_Tools()
 	fi
 	if [ "$php_ext_date" == "20090626" ]; then
 	    php_ext_date="no-debug-zts-${php_ext_date}"
+	elif [ "$php_ext_date" == "20100525" ]; then
+	    php_ext_date="no-debug-zts-${php_ext_date}"
 	else
 	    php_ext_date="no-debug-non-zts-${php_ext_date}"
 	fi

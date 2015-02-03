@@ -1,5 +1,18 @@
+#!/bin/bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:/root/bin:~/bin
+export PATH
+# Check if user is root
+START="no"
+if [ $UID != 0 ]; then echo "Error: You must be root to run the install script, please use root to install lanmps";exit;fi
+. lib/common.sh
 
+PHP_KEY="php5.4.x"
+PHP_VER=${VERS['php5.4.x']}
+IN_DIR_SETS['php5.4.x']=${IN_DIR}/php54
+SERVER="apache"
 
+function Install_PHP54x()
+{
 tmp_configure=""
 if [ $SERVER == "nginx" ]; then
 	tmp_configure="--enable-fpm --with-fpm-user=www --with-fpm-group=www"
@@ -12,8 +25,8 @@ echo "php-${VERS['php5.4.x']}.tar.gz"
 cd $IN_DOWN
 tar zxvf php-${PHP_VER}.tar.gz
 cd php-${PHP_VER}/
-./configure --prefix="${IN_DIR}/php" \
---with-config-file-path="${IN_DIR}/php" \
+./configure --prefix="${IN_DIR_SETS['php5.4.x']}" \
+--with-config-file-path="${IN_DIR_SETS['php5.4.x']}" \
 --with-mysql=mysqlnd \
 --with-mysqli=mysqlnd \
 --with-pdo-mysql=mysqlnd \
@@ -47,20 +60,11 @@ cd php-${PHP_VER}/
 --with-gettext \
 --disable-fileinfo $tmp_configure
 
-#make ZEND_EXTRA_LIBS='-liconv'
 make
 make install
-#	--enable-magic-quotes 
-#	--enable-safe-mode 
-#	--with-curlwrappers 
-[ -e /usr/bin/php ] && rm -f "/usr/bin/php"
-ln -s "${IN_DIR}/php/bin/php" /usr/bin/php
-ln -s "${IN_DIR}/php/bin/phpize" /usr/bin/phpize
-ln -s "${IN_DIR}/php/sbin/php-fpm" /usr/bin/php-fpm
 
-php_ini="${IN_DIR}/php/php.ini"
+php_ini="${IN_DIR_SETS['php5.4.x']}/php.ini"
 echo "Copy new php configure file. $php_ini "
-#mkdir -p "${IN_DIR}/etc"
 cp php.ini-production $php_ini
 
 echo "Modify php.ini......"
@@ -78,7 +82,7 @@ sed -i 's/disable_functions =.*/disable_functions = passthru,exec,system,chroot,
 sed -i 's:mysql.default_socket =:mysql.default_socket ='$IN_DIR'/mysql/data/mysql.sock:g' $php_ini
 sed -i 's/expose_php/;expose_php/g' $php_ini
 
-ln -s $php_ini $IN_DIR/etc/php.ini
+ln -s $php_ini $IN_DIR/etc/php5.4.x.ini
 
 #PHP-FPM
 if [ $SERVER == "nginx" ]; then
@@ -111,3 +115,71 @@ fi
 fi
 #PHP-FPM
 unset php_ini conf
+}
+
+function Install_PHP_Tools()
+{
+	local php_ini=${IN_DIR_SETS['php5.4.x']}/php.ini
+	
+	echo "Install memcache php extension..."
+	
+	echo "tar zxvf memcache-${VERS['memcache']}.tgz"
+	cd $IN_DOWN
+	tar zxvf memcache-${VERS['memcache']}.tgz
+	cd memcache-${VERS['memcache']}
+	${IN_DIR_SETS['php5.4.x']}/bin/phpize
+	./configure --enable-memcache --with-php-config=${IN_DIR_SETS['php5.4.x']}/bin/php-config --with-zlib-dir
+	make && make install
+
+	local php_v=`${IN_DIR_SETS['php5.4.x']}/bin/php -v`
+	local php_ext_date="20131226"
+	sed -i 's#; extension_dir = "./"#extension_dir = "./"#' $php_ini
+	echo "${IN_DIR_SETS['php5.4.x']}/bin/php -v"
+	echo $php_v
+	if echo "$php_v" | grep -q "5.6."; then
+		php_ext_date="20131226"
+	elif echo "$php_v" | grep -q "5.5."; then
+		php_ext_date="20121212"
+	elif echo "$php_v" | grep -q "5.4."; then
+		php_ext_date="20100525"
+	elif echo "$php_v" | grep -q "5.3."; then
+		php_ext_date="20090626"
+	elif echo "$php_v" | grep -q "5.2."; then
+		php_ext_date="20060613"
+	fi
+
+	if [ "$php_ext_date" == "20090626" ]; then
+	    php_ext_date="no-debug-zts-${php_ext_date}"
+	elif [ "$php_ext_date" == "20100525" ]; then
+	    php_ext_date="no-debug-zts-${php_ext_date}"
+	else
+	    php_ext_date="no-debug-non-zts-${php_ext_date}"
+	fi
+
+	sed -i 's#extension_dir = "./"#extension_dir ='${IN_DIR_SETS['php5.4.x']}'/lib/php/extensions/'$php_ext_date'/\nextension =memcache.so\n#' $php_ini
+	echo 's#extension_dir = "./"#extension_dir = "'${IN_DIR_SETS['php5.4.x']}'/lib/php/extensions/'$php_ext_date'/"\nextension = memcache.so\n#'
+
+}
+
+
+function Starup()
+{
+	echo "Set start"
+}
+
+
+{ 
+ 
+
+Install_PHP54x;
+
+Install_PHP_Tools;
+
+ }  2>&1 | tee -a "${LOGPATH}/other.php5.4.x.Install.log"
+ 
+echo "ok"
+echo "ok"
+echo "ok"
+echo "ok"
+echo "ok"
+echo "ok"
