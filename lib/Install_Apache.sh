@@ -21,6 +21,7 @@ function Install_Apache {
 	--prefix=$IN_DIR/apache \
 	--with-included-apr \
 	--enable-nonportable-atomics=yes \
+	--with-mpm=prefork \
 	--with-z
 	
 	make && make install
