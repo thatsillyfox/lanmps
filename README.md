@@ -1,3 +1,6 @@
+# 此用户下不再更新，请访问 [https://github.com/foxiswho/lanmps](https://github.com/foxiswho/lanmps)
+
+
 LANMPS 一键安装包,php绿色环境套件包
 =====================================
 
